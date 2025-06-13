@@ -1,48 +1,48 @@
 # ABM de Usuarios y Personas - Blazor (.NET 8)
 
-> Este proyecto es una aplicaciÛn web construida con **Blazor Server** y **.NET 8**, que permite gestionar un sistema de usuarios y personas (Altas, Bajas y Modificaciones - ABM).
+> Este proyecto es una aplicaci√≥n web construida con **Blazor Server** y **.NET 8**, que permite gestionar un sistema de usuarios y personas (Altas, Bajas y Modificaciones - ABM).
 
 ## Funcionalidades
 
-- Registro, ediciÛn y eliminaciÛn de usuarios.
-- Registro, ediciÛn y eliminaciÛn de personas.
+- Registro, edici√≥n y eliminaci√≥n de usuarios.
+- Registro, edici√≥n y eliminaci√≥n de personas.
 - Validaciones en formularios.
-- NavegaciÛn din·mica con componentes de Blazor.
+- Navegaci√≥n din√°mica con componentes de Blazor.
 
-## TecnologÌas utilizadas 
+## Tecnolog√≠as utilizadas
 
 - .NET 8
 - Blazor Server
 - SQL Server
-- Bootstrap 5 (opcional)
+- Bootstrap 5 
 
-##  CÛmo Ejecutar el Proyecto
+## C√≥mo Ejecutar el Proyecto
 
 1. Clonar el repositorio:
 
-```bash
-git clone https://github.com/MicaCaceres/ABM-Blazor.git
+   ```bash
+  - git clone https://github.com/MicaCaceres/ABM-Blazor.git
+  - cd ABM-Blazor
 
-cd ABM-Blazor
 
 2. Crear la base de datos
-PodÈs generar la base de datos local ejecutando el script SQL que se encuentra en el archivo creacion_base_locate.sql.
-Este script contiene datos de ejemplo utilizados por la aplicaciÛn.
+Pod√©s generar la base de datos local ejecutando el script SQL que se encuentra en el archivo creacion_base_locate.sql.
+Este script contiene datos de ejemplo utilizados por la aplicaci√≥n.
 
-??? Si querÈs agregar o quitar datos, record· modificar tanto el archivo SQL como el cÛdigo del proyecto si es necesario.
+> Si quer√©s agregar o quitar datos, record√° modificar tanto el archivo SQL como el c√≥digo del proyecto si es necesario.
 
-3. Configurar la cadena de conexiÛn
-En el archivo appsettings.json, actualiz· el valor de CadenaConexion con los datos de tu servidor local o remoto:
+3. Configurar la cadena de conexi√≥n
+En el archivo appsettings.json, actualiz√° el valor de CadenaConexion con los datos de tu servidor local o remoto:
 
 "ConnectionStrings": {
   "CadenaConexion": "Server=TU_SERVIDOR;Database=TU_BASE_DE_DATOS;Integrated Security=True;TrustServerCertificate=True;"
 }
 
-4. Ejecutar la aplicaciÛn
+4. Ejecutar la aplicaci√≥n
 Desde Visual Studio:
 
-AbrÌ el archivo .sln.
+- Abr√≠ el archivo .sln.
 
-Seleccion· el proyecto como startup.
+- Seleccion√° el proyecto como startup.
 
-Ejecut· presionando F5 o el botÛn de "Iniciar depuraciÛn".
+- Ejecut√° presionando F5 o el bot√≥n de "Iniciar depuraci√≥n".
