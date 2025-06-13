@@ -1,0 +1,160 @@
+﻿using Microsoft.Data.SqlClient;
+using ABM.DTOs;
+
+namespace ABM.DALs.ModelsDALs
+{
+    public class UsuarioRolModelDALs : IBaseDAL<UsuarioRol, UsuarioRol, SqlTransaction>
+    {
+        private readonly SqlConnection _sqlConnection;
+
+        public UsuarioRolModelDALs(SqlConnection sqlConnection)
+        {
+            _sqlConnection = sqlConnection;
+        }
+
+        async public Task<List<UsuarioRol>> GetAll(ITransaction<SqlTransaction>? transaccion = null)
+        {
+            var lista = new List<UsuarioRol>();
+
+            string sqlQuery = @"
+                              SELECT u_r.* 
+                              FROM Usuarios_Roles u_r ";
+
+            var conexion = await GetOpenedConnectionAsync(transaccion);
+
+            using var query = new SqlCommand(sqlQuery, conexion);
+
+            using var reader = await query.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                var objeto = ReadAsObjecto(reader);
+                lista.Add(objeto);
+            }
+            return lista;
+        }
+
+        async public Task<UsuarioRol?> GetByKey(UsuarioRol usuarioRol, ITransaction<SqlTransaction>? transaccion = null)
+        {
+            UsuarioRol objeto = null;
+
+            string sqlQuery =@"
+                             SELECT TOP 1 u_r.* 
+                             FROM Usuarios_Roles u_r
+                             WHERE UPPER(TRIM(u_r.Nombre_Usuario)) LIKE UPPER(TRIM(@NombreUsuario))
+                                    AND UPPER(TRIM(u_r.Nombre_Rol)) LIKE UPPER(TRIM(@NombreRol))";
+
+            var conexion = await GetOpenedConnectionAsync(transaccion);
+
+            using var query = new SqlCommand(sqlQuery, conexion);
+            query.Parameters.AddWithValue("@NombreUsuario", usuarioRol?.NombreUsuario);
+            query.Parameters.AddWithValue("@NombreRol", usuarioRol?.NombreRol);
+
+            using var reader = await query.ExecuteReaderAsync();
+
+            if (await reader.ReadAsync())
+            {
+                objeto = ReadAsObjecto(reader);
+            }
+            return objeto;
+        }
+
+        async public Task<List<UsuarioRol?>> GetByUsuario(UsuarioRol usuarioRol, ITransaction<SqlTransaction>? transaccion = null)
+        {
+            List<UsuarioRol> objetos = new List<UsuarioRol>();
+
+            string sqlQuery =@"
+                             SELECT u_r.* 
+                             FROM Usuarios_Roles u_r
+                             WHERE UPPER(TRIM(u_r.Nombre_Usuario)) LIKE UPPER(TRIM(@NombreUsuario))
+                                    AND UPPER(TRIM(u_r.Nombre_Rol)) LIKE UPPER(TRIM(@NombreRol))";
+
+            var conexion = await GetOpenedConnectionAsync(transaccion);
+
+            using var query = new SqlCommand(sqlQuery, conexion, transaccion?.GetInternalTransaction());
+            query.Parameters.AddWithValue("@NombreUsuario", usuarioRol?.NombreUsuario);
+            query.Parameters.AddWithValue("@NombreRol", usuarioRol?.NombreRol);
+
+            using var reader = await query.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                var objeto = ReadAsObjecto(reader);
+                objetos.Add(objeto);
+            }
+            return objetos;
+        }
+
+        async public Task<bool> Insert(UsuarioRol nuevo, ITransaction<SqlTransaction>? transaccion = null)
+        {
+            string sqlQuery =@"
+                             INSERT Usuarios_Roles(Nombre_Usuario, Nombre_Rol)
+                             VALUES (@NombreUsuario, @NombreRol)";
+
+            var conexion = await GetOpenedConnectionAsync(transaccion);
+
+            using var query = new SqlCommand(sqlQuery, conexion, transaccion?.GetInternalTransaction());
+            query.Parameters.AddWithValue("@NombreUsuario", nuevo.NombreUsuario);
+            query.Parameters.AddWithValue("@NombreRol", nuevo.NombreRol);
+
+            int cantInsertados = Convert.ToInt32(await query.ExecuteNonQueryAsync());
+            return cantInsertados > 0;
+        }
+
+        async public Task<bool> Update(UsuarioRol actualizar, ITransaction<SqlTransaction>? transaccion = null)
+        {
+            string sqlQuery =@"
+                             UPDATE Usuarios_Roles SET Nombre_Usuario=@Nombre_Usuario, Nombre_Rol=@Nombre_Rol
+                             WHERE UPPER(TRIM(Nombre_Usuario)) LIKE UPPER(@NombreUsuario) 
+                                    AND UPPER(TRIM(Nombre_Rol)) LIKE UPPER(@NombreRol)";
+
+            var conexion = await GetOpenedConnectionAsync(transaccion);
+
+            using var query = new SqlCommand(sqlQuery, conexion, transaccion?.GetInternalTransaction());
+            query.Parameters.AddWithValue("@NombreUsuario", actualizar.NombreUsuario);
+            query.Parameters.AddWithValue("@NombreRol", actualizar.NombreRol);
+
+            int cantidad = await query.ExecuteNonQueryAsync();
+
+            return cantidad > 0;
+        }
+
+        async public Task<bool> Delete(UsuarioRol usuarioRol, ITransaction<SqlTransaction>? transaccion = null)
+        {
+            string sqlQuery =@"
+                             DELETE FROM Usuarios_Roles
+                             WHERE UPPER(TRIM(Nombre_Usuario)) LIKE UPPER(@NombreUsuario)
+                                     AND UPPER(TRIM(Nombre_Rol)) LIKE UPPER(@NombreRol)
+                            ";
+            var conexion = await GetOpenedConnectionAsync(transaccion);
+
+            using var query = new SqlCommand(sqlQuery, conexion, transaccion?.GetInternalTransaction());
+            query.Parameters.AddWithValue("@NombreUsuario", usuarioRol.NombreUsuario);
+            query.Parameters.AddWithValue("@NombreRol", usuarioRol.NombreRol);
+
+            int eliminados = await query.ExecuteNonQueryAsync();
+
+            return eliminados > 0;
+        }
+
+        private async Task<SqlConnection> GetOpenedConnectionAsync(ITransaction<SqlTransaction>? transaccion)
+        {
+            var conexion = transaccion?.GetInternalTransaction()?.Connection ?? _sqlConnection;
+            if (conexion.State == System.Data.ConnectionState.Closed)
+            {
+                await conexion.OpenAsync();
+            }
+            return conexion;
+        }
+
+        protected UsuarioRol ReadAsObjecto(SqlDataReader reader)
+        {
+            string nombreUsuario = reader["Nombre_Usuario"] != DBNull.Value ? Convert.ToString(reader["Nombre_Usuario"]) : "";
+            string nombreRol = reader["Nombre_Rol"] != DBNull.Value ? Convert.ToString(reader["Nombre_Rol"]) : "";
+
+            var objeto = new UsuarioRol { NombreUsuario = nombreUsuario, NombreRol = nombreRol };
+
+            return objeto;
+        }
+    }
+}

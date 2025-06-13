@@ -1,0 +1,95 @@
+﻿@page "/login"
+@using ABM.Components.Layout
+@layout LoginLayout
+
+@using ABM.DTOs
+@using ABM.Services
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authentication
+
+
+<section class="container">
+	<h1>
+			Login
+	</h1>
+	<div class="card p-2 col-8">
+		<EditForm Model="@usuario" onValidSubmit="OnSubmit" FormName="LoginForm" Enhance">
+			@if (isError)
+			{
+				<div class="alert-danger">@error</div>	
+			}
+			<DataAnnotationsValidator/>
+			<ValidationSummary class="alert alert-danger"/>
+
+			<div>
+				<label class="form-label" for="nombre">Nombre</label>
+				<InputText id="usuario" class="form-control" @bind-Value="usuario.Nombre"/>
+				<ValidationMessage For="@(()=>usuario.Nombre)" style="color:indianred"/>
+			</div>
+			<div>
+				<label class="form-label" for="clave">Clave</label>
+				<InputText id="usuario" class="form-control" @bind-Value="usuario.Clave" />
+				<ValidationMessage For="@(() => usuario.Clave)" style="color:indianred" />
+			</div>
+
+			<div>
+
+			<button type="submit" class="btn btn-primary">
+				Ingresar
+			</button>
+			</div>
+		</EditForm> 
+	</div>
+</section>
+@code {
+	string error;
+	bool isError;
+
+	[SupplyParameterFromForm]
+	private Usuario usuario { get; set; } = new();
+	List<string> roles = new() { "Admin", "Encuestador","Supervisor" };
+
+
+	[Inject] UsuarioService _usuarioService { get; set; }
+	[Inject] IHttpContextAccessor HttpContextAccessor { get; set; }
+	[Inject] Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery { get; set; }
+
+	async public Task OnSubmit()
+	{
+		if (await _usuarioService.VerificarLogin(usuario) == null)
+		{
+			error = "Usuario o contraseña no valido";
+			isError = true;
+			return;
+		}
+		var claims = new List<Claim>
+		{
+			new Claim(ClaimTypes.Name, usuario.Nombre),
+			new Claim("Cuit", "23244324"),
+
+		};
+		var roles = await _usuarioService.GetRolesByUsuario(usuario.Nombre);
+
+		foreach (var rol in roles)
+		{
+			claims.Add(new Claim(ClaimTypes.Role, rol.NombreRol));
+		}
+
+		var identity = new ClaimsIdentity(claims, "Cookies");
+		var principal = new ClaimsPrincipal(identity);
+
+		var httpContext = HttpContextAccessor.HttpContext;
+		if (httpContext != null)
+		{
+			await httpContext.SignInAsync("Cookies", principal);
+			var returnUrl = "/personas";
+			Navigation.NavigateTo(returnUrl, forceLoad: true);
+		}
+		else
+		{
+			error = "No se pudo iniciar sesion debido a un error interno.";	
+		}
+
+	}
+
+}
