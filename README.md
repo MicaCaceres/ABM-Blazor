@@ -28,28 +28,40 @@
 
 ```bash
 git clone https://github.com/MicaCaceres/ABM-Blazor.git
-cd ABM-Blazor```
+cd ABM-Blazor
+```
+
+---
 
 ### 2. Crear la base de datos
-Ejecutá el script creacion_base_locate.sql que se encuentra en el repositorio.
 
+Ejecutá el script `creacion_base_locate.sql` que se encuentra en el repositorio.  
 Este script genera la base de datos local y agrega datos de ejemplo utilizados por la aplicación.
 
 > ⚠️ Si necesitás modificar los datos iniciales, recordá actualizar tanto el script SQL como el código del proyecto si corresponde.
 
-### 3. Configurar la cadena de conexión
-Abrí el archivo appsettings.json.
+---
 
-Modificá el valor de "CadenaConexion" con los datos de tu servidor:
+### 3. Configurar la cadena de conexión
+
+Abrí el archivo `appsettings.json`.
+
+Modificá el valor de `"CadenaConexion"` con los datos de tu servidor:
+
+```json
 "ConnectionStrings": {
   "CadenaConexion": "Server=TU_SERVIDOR;Database=TU_BASE_DE_DATOS;Integrated Security=True;TrustServerCertificate=True;"
 }
+```
+
+---
 
 ### 4. Ejecutar la aplicación
-Desde Visual Studio:
 
-- Abrí el archivo .sln del proyecto.
+Desde **Visual Studio**:
 
+- Abrí el archivo `.sln` del proyecto.
 - Seleccioná el proyecto como proyecto de inicio.
+- Ejecutá la aplicación con **F5** o haciendo clic en **"Iniciar depuración"**.
 
-- Ejecutá la aplicación con F5 o haciendo clic en "Iniciar depuración".
+---
