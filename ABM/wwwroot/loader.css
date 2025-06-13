@@ -1,0 +1,43 @@
+﻿.wrap-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 30vh;
+    background-color: transparent;
+}
+
+.loader {
+    max-width: 120px;
+    width: 100%;
+    height: auto;
+    stroke-linecap: round;
+}
+
+circle {
+    fill: none;
+    stroke-width: 3.5;
+    stroke-dasharray: 550;
+    stroke-dashoffset: 0;
+    animation: preloader 3s infinite ease-in-out;
+    transform-origin: 170px 170px;
+    will-change: transform;
+}
+
+@keyframes preloader {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(360deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.loader-text {
+    text-align:center;
+    margin-top:5px;
+}

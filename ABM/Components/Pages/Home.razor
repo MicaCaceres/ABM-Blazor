@@ -5,38 +5,9 @@
 
 <PageTitle>Home</PageTitle>
 
-@if (string.IsNullOrEmpty(nombreUsuario))
-{
-    <div>
-        <h2>Aún no estás logueado.</h2>
-        <p>
-            <NavLink href="/login" class="text-decoration-none text-primary fw-bold">
-                Iniciar sesión aqui
-            </NavLink>
-        </p>
-    </div>
-}
-else
-{
-    <h3>Bienvenido, @nombreUsuario!</h3>
-}
-
-
+<h1>Hello world!</h1>
 
 Welcome to your new app.
 
 
-@code {
-    private string nombreUsuario;
 
-    protected override async Task OnInitializedAsync()
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (user.Identity != null && user.Identity.IsAuthenticated)
-        {
-            nombreUsuario = user.Identity.Name;
-        }
-    }
-}

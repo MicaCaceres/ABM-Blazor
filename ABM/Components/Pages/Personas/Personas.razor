@@ -1,7 +1,108 @@
 ﻿@page "/personas"
 @rendermode InteractiveServer
-<h3>Personas</h3>
+@attribute [StreamRendering]
+@attribute [Authorize]
+
+@using ABM.DTOs
+@using ABM.Services
+@using Microsoft.AspNetCore.Authorization
+
+
+@if (_personas==null)
+{
+        <Loader/>       
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>DNI</th>
+                <th>Nombre</th>
+                <th>Fecha Nacimiento</th>
+                <th>Acciones disponibles </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var persona in _personas)
+            {
+                <tr>
+                    <td>@persona.Id</td>
+                    <td>@persona.DNI</td>
+                    <td>@persona.Nombre</td>
+                    <td>@persona.FechaNacimiento?.ToShortDateString()</td>
+                    <td>
+                        <button class="btn btn-outline-primary btn-sm border-3" @onclick="() => viewFormDetailRegistro(persona.Id)">
+                            <i class="fa-solid fa-edit"></i> Editar
+                        </button>
+                        <button class="btn btn-danger btn-sm border-3" @onclick="() => eliminar(persona.Id)">
+                            <i class="fa-solid fa-trash"></i> Eliminar
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @code {
+    [SupplyParameterFromForm]
+    private Persona _persona { get; set; }
+    private List<Persona> _personas { get; set; } = new();
+    [Inject] private PersonaService _service { get; set; }
 
+    private bool isVisibleRegister{ get; set; }
+    private bool isVisibleEdit { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		_personas = await _service.GetAll();
+		StateHasChanged();
+	}
+
+    async protected Task viewFormNewRegistro()
+    {
+        isVisibleRegister = true;
+        isVisibleEdit = false;
+    }
+
+    async protected Task viewFormDetailRegistro(int? id)
+    {
+        isVisibleRegister = true;
+        isVisibleEdit = false;
+        _persona = await _service.GetById(id ?? 0);
+    }
+    async private Task eliminar(int? id)
+    {
+        await _service.Eliminar((int)id);
+        _personas = await _service.GetAll();
+    }
+
+    async private Task Submit()
+    {
+        _persona.FechaNacimiento = DateTime.Now;
+
+        await _service.CrearNuevo(_persona);
+
+        _personas.Add(_persona);
+    }
+
+    private async Task AddPersona()
+    {
+        _service.CrearNuevo(_persona);
+    }
+
+    private async Task editPersona()
+    {
+        try
+        {
+            _service.Actualizar(_persona);
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+   
 }
