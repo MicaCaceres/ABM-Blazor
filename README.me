@@ -1,0 +1,48 @@
+# ABM de Usuarios y Personas - Blazor (.NET 8)
+
+> Este proyecto es una aplicación web construida con **Blazor Server** y **.NET 8**, que permite gestionar un sistema de usuarios y personas (Altas, Bajas y Modificaciones - ABM).
+
+## Funcionalidades
+
+- Registro, edición y eliminación de usuarios.
+- Registro, edición y eliminación de personas.
+- Validaciones en formularios.
+- Navegación dinámica con componentes de Blazor.
+
+## Tecnologías utilizadas 
+
+- .NET 8
+- Blazor Server
+- SQL Server
+- Bootstrap 5 (opcional)
+
+##  Cómo Ejecutar el Proyecto
+
+1. Clonar el repositorio:
+
+```bash
+git clone https://github.com/MicaCaceres/ABM-Blazor.git
+
+cd ABM-Blazor
+
+2. Crear la base de datos
+Podés generar la base de datos local ejecutando el script SQL que se encuentra en el archivo creacion_base_locate.sql.
+Este script contiene datos de ejemplo utilizados por la aplicación.
+
+??? Si querés agregar o quitar datos, recordá modificar tanto el archivo SQL como el código del proyecto si es necesario.
+
+3. Configurar la cadena de conexión
+En el archivo appsettings.json, actualizá el valor de CadenaConexion con los datos de tu servidor local o remoto:
+
+"ConnectionStrings": {
+  "CadenaConexion": "Server=TU_SERVIDOR;Database=TU_BASE_DE_DATOS;Integrated Security=True;TrustServerCertificate=True;"
+}
+
+4. Ejecutar la aplicación
+Desde Visual Studio:
+
+Abrí el archivo .sln.
+
+Seleccioná el proyecto como startup.
+
+Ejecutá presionando F5 o el botón de "Iniciar depuración".

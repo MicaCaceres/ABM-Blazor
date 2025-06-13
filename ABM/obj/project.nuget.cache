@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qNmQDhaC7ZE=",
+  "dgSpecHash": "G3BPKn9P7F0=",
   "success": true,
-  "projectFilePath": "E:\\Practicas Trabajo\\ABM\\ABM\\ABM.csproj",
+  "projectFilePath": "E:\\Practicas Trabajo\\ABM-Blazor\\ABM\\ABM.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\micac\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\micac\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

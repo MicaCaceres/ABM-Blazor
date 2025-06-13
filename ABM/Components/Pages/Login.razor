@@ -6,6 +6,7 @@
 @using ABM.Services
 @using System.Security.Claims
 @using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Components.Authorization
 
 
 <section class="container">
@@ -44,6 +45,20 @@
 @code {
 	string error;
 	bool isError;
+
+	[Inject] AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+		var user = authState.User;
+
+		if (user.Identity is not null && user.Identity.IsAuthenticated)
+		{
+			Navigation.NavigateTo("/", forceLoad: true);
+		}
+	}
+
 
 	[SupplyParameterFromForm]
 	private Usuario usuario { get; set; } = new();

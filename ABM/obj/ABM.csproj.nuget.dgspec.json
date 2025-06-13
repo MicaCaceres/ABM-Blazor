@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Practicas Trabajo\\ABM\\ABM\\ABM.csproj": {}
+    "E:\\Practicas Trabajo\\ABM-Blazor\\ABM\\ABM.csproj": {}
   },
   "projects": {
-    "E:\\Practicas Trabajo\\ABM\\ABM\\ABM.csproj": {
+    "E:\\Practicas Trabajo\\ABM-Blazor\\ABM\\ABM.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Practicas Trabajo\\ABM\\ABM\\ABM.csproj",
+        "projectUniqueName": "E:\\Practicas Trabajo\\ABM-Blazor\\ABM\\ABM.csproj",
         "projectName": "ABM",
-        "projectPath": "E:\\Practicas Trabajo\\ABM\\ABM\\ABM.csproj",
+        "projectPath": "E:\\Practicas Trabajo\\ABM-Blazor\\ABM\\ABM.csproj",
         "packagesPath": "C:\\Users\\micac\\.nuget\\packages\\",
-        "outputPath": "E:\\Practicas Trabajo\\ABM\\ABM\\obj\\",
+        "outputPath": "E:\\Practicas Trabajo\\ABM-Blazor\\ABM\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Visual Studio\\Microsoft Visual Studio2022Community\\NuGetPackages"

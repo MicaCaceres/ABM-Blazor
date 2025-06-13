@@ -1,0 +1,37 @@
+
+.vs/
+## Archivos de compilación
+bin/
+obj/
+
+## Archivos de configuración local
+appsettings.Development.json
+appsettings.Local.json
+*.user
+*.vspscc
+*.vssscc
+
+## Archivos de publicación
+publish/
+*.dbmdl
+
+## Logs y caché
+*.log
+.vscode/
+.idea/
+*.suo
+*.user
+*.cache
+*.DS_Store
+
+## Configuración de Rider o VS Code
+.vscode/
+.idea/
+
+## Archivos secretos
+.env
+.env.*
+
+## Archivos generados por EF Core (si usás migraciones)
+Migrations/
+/ABM/appsettings.Development.json
