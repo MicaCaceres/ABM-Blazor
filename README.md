@@ -28,7 +28,7 @@
 
 ```bash
 git clone https://github.com/MicaCaceres/ABM-Blazor.git
-cd ABM-Blazor
+cd ABM-Blazor```
 
 ### 2. Crear la base de datos
 Ejecutá el script creacion_base_locate.sql que se encuentra en el repositorio.
