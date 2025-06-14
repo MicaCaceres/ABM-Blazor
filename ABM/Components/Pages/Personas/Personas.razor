@@ -7,6 +7,43 @@
 @using ABM.Services
 @using Microsoft.AspNetCore.Authorization
 
+<button type="button" class="btn btn-secondary ms-2" @onclick="ShowCreateForm">Agregar Persona</button>
+@if ((isCreating || isEditing) && _persona is not null)
+{
+    <EditForm Model="@_persona" OnValidSubmit="SavePersona">
+        <DataAnnotationsValidator />
+        <ValidationSummary class="text-danger" />
+
+        @if (isEditing)
+        {
+            <div class="mb-3">
+                <label class="form-label">ID</label>
+                <InputNumber class="form-control" @bind-Value="_persona.Id" readonly />
+            </div>
+        }
+
+        <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <InputText class="form-control" @bind-Value="_persona.Nombre" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">DNI</label>
+            <InputNumber class="form-control" @bind-Value="_persona.DNI" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Fecha de Nacimiento</label>
+            <InputDate class="form-control" @bind-Value="_persona.FechaNacimiento" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            @(isCreating ? "Crear Persona" : "Guardar Cambios")
+        </button>
+        <button type="button" class="btn btn-secondary ms-2" @onclick="CancelForm">Cancelar</button>
+    </EditForm>
+}
+
 
 @if (_personas==null)
 {
@@ -33,7 +70,7 @@ else
                     <td>@persona.Nombre</td>
                     <td>@persona.FechaNacimiento?.ToShortDateString()</td>
                     <td>
-                        <button class="btn btn-outline-primary btn-sm border-3" @onclick="() => viewFormDetailRegistro(persona.Id)">
+                        <button class="btn btn-outline-primary btn-sm border-3" @onclick="() => ShowEditForm(persona.Id)">
                             <i class="fa-solid fa-edit"></i> Editar
                         </button>
                         <button class="btn btn-danger btn-sm border-3" @onclick="() => eliminar(persona.Id)">
@@ -52,8 +89,23 @@ else
     private List<Persona> _personas { get; set; } = new();
     [Inject] private PersonaService _service { get; set; }
 
-    private bool isVisibleRegister{ get; set; }
-    private bool isVisibleEdit { get; set; }
+
+    private bool isEditing = false;
+    private bool isCreating = false;
+
+    async Task ShowEditForm(int id)
+    {
+        _persona = await _service.GetById(id);
+        isEditing = true;
+        isCreating = false;
+    }
+
+    async Task ShowCreateForm()
+    {
+        _persona = new Persona();
+        isCreating = true;
+        isEditing = false;
+    }
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -61,48 +113,35 @@ else
 		StateHasChanged();
 	}
 
-    async protected Task viewFormNewRegistro()
-    {
-        isVisibleRegister = true;
-        isVisibleEdit = false;
-    }
-
-    async protected Task viewFormDetailRegistro(int? id)
-    {
-        isVisibleRegister = true;
-        isVisibleEdit = false;
-        _persona = await _service.GetById(id ?? 0);
-    }
     async private Task eliminar(int? id)
     {
         await _service.Eliminar((int)id);
         _personas = await _service.GetAll();
     }
 
-    async private Task Submit()
-    {
-        _persona.FechaNacimiento = DateTime.Now;
-
-        await _service.CrearNuevo(_persona);
-
-        _personas.Add(_persona);
-    }
-
-    private async Task AddPersona()
-    {
-        _service.CrearNuevo(_persona);
-    }
-
-    private async Task editPersona()
+    private async Task SavePersona()
     {
         try
         {
-            _service.Actualizar(_persona);
-        }
-        catch (Exception e)
-        {
+            if (isCreating)
+                await _service.CrearNuevo(_persona);
+            else if (isEditing)
+                await _service.Actualizar(_persona);
 
+            _personas = await _service.GetAll();
+            StateHasChanged();
+            CancelForm();
         }
+        catch (Exception ex)
+        {
+            
+        }
+    }
+    private void CancelForm()
+    {
+        isEditing = false;
+        isCreating = false;
+        _persona = null;
     }
    
 }
